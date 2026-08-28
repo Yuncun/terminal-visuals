@@ -37,7 +37,7 @@ scripts/flow.sh 'graph LR; A[edit] --> B[commit] --> C[push] --> D[work: pull]'
 scripts/flow.sh 'graph TD; Q[question] --> W[web search]; Q --> H[HN / Reddit]; W --> R[report]; H --> R'
 ```
 
-One short label per box; `LR` for pipelines, `TD` for branching.
+One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for branching. Render even a three-box one-liner.
 
 ## Examples
 
