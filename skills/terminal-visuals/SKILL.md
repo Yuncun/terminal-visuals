@@ -18,6 +18,7 @@ how big is each, relative?           bar chart
 when did things happen?              timeline rows
 where does each option sit?          2x2
 what changed?                        before / after
+what is in each part?                titled boxes
 how do N items compare on M things?  table, and only then
 ```
 
@@ -83,6 +84,16 @@ Timeline: date, then a label.
                     │
    output style     │        CLAUDE.md
                     │
+```
+
+Titled boxes: the name above the box, one-word contents inside, the relation on the arrow. Hand-drawn, so keep it to two or three boxes.
+
+```
+CLAUDE.md                  terminal-visuals
+┌─────────┐   points to   ┌────────────────┐
+│ rules   ├──────────────►│ examples       │
+│         │               │ flow.sh        │
+└─────────┘               └────────────────┘
 ```
 
 Before / after: the shape of the change, not the text of it.
