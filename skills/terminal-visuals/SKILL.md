@@ -37,11 +37,11 @@ One short label per box; `LR` for pipelines, `TD` for branching.
 
 ## Examples
 
-Checklist: plain ASCII marks render in every terminal.
+Checklist: `[✔]` and `[ ]` keep the same width. The bare box characters `☐ ☑` fail to render in some terminals.
 
 ```
-[x] skill published
-[x] CLAUDE.md rewritten
+[✔] skill published
+[✔] CLAUDE.md rewritten
 [ ] evals run
 ```
 
