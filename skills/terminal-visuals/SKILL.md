@@ -26,6 +26,8 @@ how do N items compare on M things?  table, and only then
 
 Two or three facts with one attribute each are a sentence, not a table.
 
+One visual per point. Two shapes of the same content is a repeat; keep the one that carries it. Separate points may each get their own.
+
 ## Flow diagrams: render, do not hand-draw
 
 Hand-drawn boxes miscount widths. Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with Mermaid text and paste the output in a code fence:
