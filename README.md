@@ -1,6 +1,7 @@
 # terminal-visuals
 
-A skill to help agents draw simple visualizations in terminal like charts, tables, flow charts, etc. are part of their responses. Hopefully lessens the brain load for yall.
+A skill to help agents draw simple visualizations in terminal like charts, tables, flow charts, etc. and to lead with them in their answers. I find that a simple diagram often helps me visualize the agents' answers without having to parse through text.
+
 
 Supports:
 (checklist, tree, flow, bar chart, timeline, 2x2, before/after, table)
