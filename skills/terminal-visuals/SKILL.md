@@ -6,7 +6,7 @@ allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/*)
 
 # Terminal visuals
 
-A visual is a map: it shows the shape of the answer so the reader can orient before reading. Labels only inside it; explanation goes in text below. If a cell or box needs a full sentence, the content has leaked into the map.
+A visual is a map: it shows the shape of the answer so the reader can orient before reading. Labels only inside it; explanation goes in text below. A comma, semicolon, or clause inside a cell or box is content that leaked into the map.
 
 ## Pick the shape by the question
 
@@ -22,6 +22,7 @@ where does each option sit?          2x2
 what changed?                        before / after
 what is in each part?                titled boxes
 how do N items compare on M things?  table, and only then
+why did it happen?                   a sentence, no visual
 ```
 
 Two or three facts with one attribute each are a sentence, not a table.
@@ -37,7 +38,7 @@ scripts/flow.sh 'graph LR; A[edit] --> B[commit] --> C[push] --> D[work: pull]'
 scripts/flow.sh 'graph TD; Q[question] --> W[web search]; Q --> H[HN / Reddit]; W --> R[report]; H --> R'
 ```
 
-One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for branching. Render even a three-box one-liner.
+One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for branching. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph, never a second render stacked under the first.
 
 ## Examples
 
