@@ -35,8 +35,10 @@ Hand-drawn boxes miscount widths. Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with
 
 ```bash
 scripts/flow.sh 'graph LR; A[edit] --> B[commit] --> C[push] --> D[work: pull]'
-scripts/flow.sh 'graph TD; Q[question] --> W[web search]; Q --> H[HN / Reddit]; W --> R[report]; H --> R'
+scripts/flow.sh 'graph LR; A[push to main] --> B[build]; P[push preview branch] --> B; B --> C[upload]; C --> D[serve prod]; C --> E[serve staging]'
 ```
+
+The third call is how a second path is drawn: same graph, extra nodes, one render.
 
 One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for branching. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph, never a second render stacked under the first.
 
@@ -130,9 +132,26 @@ Before / after: the shape of the change, not the text of it.
 |---|---|
 | "don't X; do Y" | "do Y" |
 
-Table: only when items have several attributes to compare.
+Table: only when items have several attributes to compare. Cells are one or two words; the reason goes under the table.
 
-| Route | Claude Code | Copilot |
+Leaked:
+
+| | pnpm | bun |
 |---|---|---|
-| plugin | yes | no |
-| npx skills | yes | yes |
+| Azure SWA | detects lockfile, works | not detected; needs a prebuilt dist or custom step |
+
+Fixed:
+
+| | pnpm | bun |
+|---|---|---|
+| Azure SWA | yes | manual build |
+
+Oryx reads `pnpm-lock.yaml` but not `bun.lock`, so bun needs its own build step.
+
+## When not to draw
+
+A "why" question is an explanation. Answer in two or three sentences; no flow of the failure, no table of fixes unless there are several fixes with several attributes each.
+
+Q: why does the build say `window is not defined`?
+
+A: Astro runs the component in Node at build time, and the chart library reads `window` when imported. Import it inside `onMount`, or mark the island `client:only`.
