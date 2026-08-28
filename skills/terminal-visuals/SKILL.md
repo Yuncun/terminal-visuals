@@ -16,6 +16,8 @@ what contains what?                  tree
 what order do things happen in?      flow (boxes and arrows)
 how big is each, relative?           bar chart
 when did things happen?              timeline rows
+how did it change over time?         bar per period, or sparkline
+what is X made of?                   indented breakdown
 where does each option sit?          2x2
 what changed?                        before / after
 what is in each part?                titled boxes
@@ -63,6 +65,29 @@ superpowers        ████████████████████ 
 mattpocock/skills  █████████████████     239k
 anthropics/skills  ████████████          172k
 last30days         ████                   60k
+```
+
+Change over time: one bar per period; a sparkline when there are many points.
+
+```
+Apr  ████             12
+May  ████████         25
+Jun  ██████████████   41
+Jul  ████████████     36
+```
+
+```
+stars/week  ▁▂▂▃▅▇▇█▆  peak Jul
+```
+
+Composition: indented breakdown with shares.
+
+```
+context per turn  100%
+├─ system prompt   42%
+├─ CLAUDE.md        6%
+├─ skills           9%
+└─ conversation    43%
 ```
 
 Timeline: date, then a label.
