@@ -1,0 +1,6 @@
+{
+  "name": "terminal-visuals",
+  "description": "Visuals for chat replies read in a terminal: which shape answers which question, examples, and a box-and-arrow renderer.",
+  "version": "0.1.0",
+  "author": { "name": "Eric Shen" }
+}
