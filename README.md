@@ -1,8 +1,9 @@
 # terminal-visuals
 
-A skill for agents whose replies are read in a terminal: which visual shape answers which question (checklist, tree, flow, bar chart, timeline, 2x2, before/after, table), an example of each, and a script that renders flow diagrams as boxes and arrows so they are never miscounted by hand.
+A skill to help agents draw simple visualizations in terminal like charts, tables, flow charts, etc. are part of their responses. Hopefully lessens the brain load for yall.
 
-The idea: a visual is a map. Labels only inside it, explanation in text below it, so the reader orients before reading.
+Supports:
+(checklist, tree, flow, bar chart, timeline, 2x2, before/after, table)
 
 ## Install
 
