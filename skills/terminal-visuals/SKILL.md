@@ -6,7 +6,15 @@ allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/*)
 
 # Terminal visuals
 
-A visual is a map: it shows the shape of the answer so the reader can orient before reading. Labels only inside it; explanation goes in text below. A comma, semicolon, or clause inside a cell or box is content that leaked into the map.
+A visual shows the shape of the answer. The reader looks at the visual first. Then the reader reads the text.
+
+The visual adds to the text answer. It does not replace the text answer.
+
+Write only labels in a cell or a box. Use known terms. Do not invent short terms.
+
+Write each explanation in the text below the visual.
+
+A comma, a semicolon, or a clause in a cell is an explanation. Move it to the text.
 
 ## Pick the shape by the question
 
@@ -44,7 +52,7 @@ One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for b
 
 ## Examples
 
-Checklist: `[✔]` and `[ ]` keep the same width. The bare box characters `☐ ☑` fail to render in some terminals.
+Checklist: `[✔]` and `[ ]` keep the same width.
 
 ```
 [✔] skill published
