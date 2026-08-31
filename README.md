@@ -11,7 +11,7 @@ Supports:
 ```
 npx skills add Yuncun/terminal-visuals            # Copilot, Codex, Cursor, Claude Code
 /plugin install terminal-visuals@yuncun            # Claude Code, via Yuncun/yuncun-marketplace
-go install github.com/AlexanderGrooff/mermaid-ascii@latest   # for flow.sh
+# flow.sh renders via termaid (https://github.com/fasouto/termaid): uses uvx, or pip install termaid
 ```
 
 ## License

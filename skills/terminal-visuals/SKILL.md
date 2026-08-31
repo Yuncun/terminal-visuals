@@ -40,7 +40,7 @@ scripts/flow.sh 'graph LR; A[push to main] --> B[build]; P[push preview branch] 
 
 The third call is how a second path is drawn: same graph, extra nodes, one render.
 
-One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for branching. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph, never a second render stacked under the first.
+One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for branching. Decision nodes `B{cached?}` and edge labels `-->|yes|` render fine. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph, never a second render stacked under the first.
 
 ## Examples
 
