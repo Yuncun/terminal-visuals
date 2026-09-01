@@ -1,7 +1,7 @@
 ---
 name: terminal-visuals
 description: Draw a visual in a chat reply or markdown doc that is read in a terminal. Use when a reply needs a flow diagram, sequence, tree, bar chart, timeline, 2x2, checklist, or before/after, and when choosing between those and a table.
-allowed-tools: Bash(scripts/*)
+allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/*)
 ---
 
 # Terminal visuals
@@ -41,7 +41,7 @@ One visual per point; one shape per piece of content.
 
 Hand-drawn boxes miscount widths. Render anything where boxes are joined by arrows. Write plain text rows by hand: a checklist, a tree, a timeline, a bar chart, and a 2x2 have no widths to align.
 
-Run `scripts/flow.sh` with Mermaid text and paste the output in a code fence:
+Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with Mermaid text and paste the output in a code fence:
 
 ```bash
 scripts/flow.sh 'graph LR; A[edit] --> B[commit] --> C[push] --> D[work: pull]'
