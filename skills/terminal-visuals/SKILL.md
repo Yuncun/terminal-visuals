@@ -1,6 +1,6 @@
 ---
 name: terminal-visuals
-description: Draw a visual in a chat reply or markdown doc that is read in a terminal. Use when a reply needs a flow diagram, sequence, tree, bar chart, timeline, 2x2, checklist, or before/after, and when choosing between those and a table.
+description: Draw a visual in a chat reply or markdown doc that is read in a terminal. Use when a reply walks through steps, a process, or how to do something, compares or ranks things, reports status or progress, or shows structure or change — as a flow diagram, sequence, tree, bar chart, timeline, 2x2, checklist, before/after, or table — and when choosing between those shapes.
 allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/*)
 ---
 
