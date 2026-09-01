@@ -1,7 +1,7 @@
 ---
 name: terminal-visuals
 description: Draw a visual in a chat reply or markdown doc that is read in a terminal. Use when a reply needs a flow diagram, sequence, tree, bar chart, timeline, 2x2, checklist, or before/after, and when choosing between those and a table.
-allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/*)
+allowed-tools: Bash(scripts/*)
 ---
 
 # Terminal visuals
@@ -10,11 +10,9 @@ A visual shows the shape of the answer. The reader looks at the visual first. Th
 
 The visual adds to the text answer. It does not replace the text answer.
 
-Write only labels in a cell or a box. Use known terms. Do not invent short terms.
+Write only labels in a cell or a box. Use terms the reader already knows.
 
-Write each explanation in the text below the visual.
-
-A comma, a semicolon, or a clause in a cell is an explanation. Move it to the text.
+Write each explanation in the text below the visual. A comma, a semicolon, or a clause in a cell is an explanation. Move it to the text.
 
 ## Pick the shape by the question
 
@@ -37,13 +35,13 @@ why did it happen?                   a sentence, no visual
 
 Two or three facts with one attribute each are a sentence, not a table.
 
-One visual per point; never two shapes of the same content.
+One visual per point; one shape per piece of content.
 
-## Boxes and arrows: render, do not hand-draw
+## Boxes and arrows: render them
 
 Hand-drawn boxes miscount widths. Render anything where boxes are joined by arrows. Write plain text rows by hand: a checklist, a tree, a timeline, a bar chart, and a 2x2 have no widths to align.
 
-Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with Mermaid text and paste the output in a code fence:
+Run `scripts/flow.sh` with Mermaid text and paste the output in a code fence:
 
 ```bash
 scripts/flow.sh 'graph LR; A[edit] --> B[commit] --> C[push] --> D[work: pull]'
@@ -52,7 +50,7 @@ scripts/flow.sh 'graph LR; A[push to main] --> B[build]; P[push preview branch] 
 
 The second call is how a second path is drawn: same graph, extra nodes, one render.
 
-`LR` for pipelines, `TD` for branching. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph, never a second render stacked under the first.
+`LR` for pipelines, `TD` for branching. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph.
 
 A diagram with its own line syntax goes in on stdin:
 
@@ -67,11 +65,11 @@ The renderer reads Mermaid, so it also draws class, ER, and git diagrams. Those 
 
 From BPMN Method and Style (Bruce Silver). The BPMN specification itself says nothing about labels.
 
-- A step is verb then object: `Approve request`. Not `Approval`. Not `Request approval process`.
+- A step is verb then object: `Approve request`.
 - A decision is a question: `Request valid?`
-- An exit carries the end state of the step before it: `Valid` and `Invalid`. Write `yes` and `no` only when the decision is a yes-or-no check.
-- A parallel split has no labels on its exits.
-- Two steps in one diagram do not share a name.
+- An exit carries the end state of the step before it: `Valid` and `Invalid`. Write `yes` and `no` when the decision is a yes-or-no check.
+- A parallel split leaves its exits bare.
+- Each step in one diagram carries its own name.
 
 ```bash
 scripts/flow.sh 'graph LR; A[Validate request] --> B{Request valid?}; B -->|Valid| C[Charge card]; B -->|Invalid| D[Return error]'
@@ -82,7 +80,7 @@ scripts/flow.sh 'graph LR; A[Validate request] --> B{Request valid?}; B -->|Vali
 From the C4 model (Simon Brown).
 
 - A box that is a thing carries its name and its type: `Postgres [database]`.
-- Label every line with the relation it shows. Do not write `uses` or `calls`.
+- Label every line with the relation it shows: `reads from`, `publishes to`, `authenticates with`.
 
 C4 also puts a one-line description inside each box. In a chat reply that makes the diagram tall, so write the description in the text below.
 
@@ -91,32 +89,32 @@ C4 also puts a one-line description inside each box. In a chat reply that makes 
 Checklist: `[✔]` and `[ ]` keep the same width.
 
 ```
-[✔] skill published
-[✔] CLAUDE.md rewritten
-[ ] evals run
+[✔] schema migrated
+[✔] endpoint deployed
+[ ] load test run
 ```
 
 Tree: names only, no annotations.
 
 ```
-~/.claude/
-├─ CLAUDE.md
-├─ skills/
-│  ├─ browsing
-│  └─ research-evidence
-└─ plugins/
+src/
+├─ config.ts
+├─ handlers/
+│  ├─ orders
+│  └─ payments
+└─ lib/
 ```
 
 Bar chart: proportional bars, value at the end.
 
-From ISO 24896:2026 (business reporting notation): name the measure and its unit, and let the heading say what the chart shows, not what it means. `Stars` is a heading. `Superpowers is winning` is not.
+From ISO 24896:2026 (business reporting notation): name the measure and its unit, and let the heading say what the chart shows rather than what it means. `Requests [thousands]` is a heading. `Checkout is winning` reads as a conclusion, so it belongs in the text below.
 
 ```
-Stars
-superpowers        ████████████████████  279k
-mattpocock/skills  █████████████████     239k
-anthropics/skills  ████████████          172k
-last30days         ████                   60k
+Requests [thousands]
+checkout   ████████████████████  240
+search     █████████████████     205
+cart       ████████████          145
+login      ████                   50
 ```
 
 Change over time: one bar per period; a sparkline when there are many points.
@@ -135,44 +133,44 @@ stars/week  ▁▂▂▃▅▇▇█▆  peak Jul
 Composition: indented breakdown with shares.
 
 ```
-context per turn  100%
-├─ system prompt   42%
-├─ CLAUDE.md        6%
-├─ skills           9%
-└─ conversation    43%
+request time  100%
+├─ auth         12%
+├─ database     54%
+├─ rendering    26%
+└─ logging       8%
 ```
 
 Timeline: date, then a label.
 
 ```
-2026-04-20  superpowers installed
-2026-07-31  browsing skill
-2026-08-27  research-evidence published
+2026-04-20  schema v2 shipped
+2026-07-31  read replica added
+2026-08-27  cache layer live
 ```
 
 2x2: axis labels at the arrow tips, one label per quadrant.
 
 ```
-                 shareable
+                  managed
                     ▲
-   plugin           │        npx skills add
+   container        │        serverless
                     │
- ───────────────────┼─────────────────▶ works in Copilot
+ ───────────────────┼─────────────────▶ scales to zero
                     │
-   output style     │        CLAUDE.md
+   bare metal       │        edge worker
                     │
 ```
 
-Titled boxes: a flow with one edge label. Render it; do not hand-draw it.
+Titled boxes: a flow with one edge label. Render it.
 
 ```bash
-scripts/flow.sh 'graph LR; A[CLAUDE.md] -->|points to| B[terminal-visuals]'
+scripts/flow.sh 'graph LR; A[Order service] -->|publishes to| B[Event bus]'
 ```
 
 ```
-┌──────────┐points to ┌─────────────────┐
-│CLAUDE.md ├─────────►│terminal-visuals │
-└──────────┘          └─────────────────┘
+┌──────────────┐publishes to ┌──────────┐
+│Order service ├────────────►│Event bus │
+└──────────────┘             └──────────┘
 ```
 
 Before / after: the shape of the change, not the text of it.
