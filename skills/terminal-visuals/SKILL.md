@@ -1,6 +1,6 @@
 ---
 name: terminal-visuals
-description: Draw a visual in a chat reply or markdown doc that is read in a terminal. Use when a reply needs a flow diagram, tree, bar chart, timeline, 2x2, checklist, or before/after, and when choosing between those and a table.
+description: Draw a visual in a chat reply or markdown doc that is read in a terminal. Use when a reply needs a flow diagram, sequence, tree, bar chart, timeline, 2x2, checklist, or before/after, and when choosing between those and a table.
 allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/*)
 ---
 
@@ -22,6 +22,8 @@ A comma, a semicolon, or a clause in a cell is an explanation. Move it to the te
 what got done?                       checklist
 what contains what?                  tree
 what order do things happen in?      flow (boxes and arrows)
+who calls whom, in what order?       sequence
+what states can it be in?            state
 how big is each, relative?           bar chart
 when did things happen?              timeline rows
 how did it change over time?         bar per period, or sparkline
@@ -37,18 +39,52 @@ Two or three facts with one attribute each are a sentence, not a table.
 
 One visual per point; never two shapes of the same content.
 
-## Flow diagrams: render, do not hand-draw
+## Boxes and arrows: render, do not hand-draw
 
-Hand-drawn boxes miscount widths. Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with Mermaid text and paste the output in a code fence:
+Hand-drawn boxes miscount widths. Render anything where boxes are joined by arrows. Write plain text rows by hand: a checklist, a tree, a timeline, a bar chart, and a 2x2 have no widths to align.
+
+Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with Mermaid text and paste the output in a code fence:
 
 ```bash
 scripts/flow.sh 'graph LR; A[edit] --> B[commit] --> C[push] --> D[work: pull]'
 scripts/flow.sh 'graph LR; A[push to main] --> B[build]; P[push preview branch] --> B; B --> C[upload]; C --> D[serve prod]; C --> E[serve staging]'
 ```
 
-The third call is how a second path is drawn: same graph, extra nodes, one render.
+The second call is how a second path is drawn: same graph, extra nodes, one render.
 
-One short verb phrase per box (steps, not nouns); `LR` for pipelines, `TD` for branching. Decision nodes `B{cached?}` and edge labels `-->|yes|` render fine. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph, never a second render stacked under the first.
+`LR` for pipelines, `TD` for branching. Render even a three-box one-liner. One render per diagram: branches and alternate paths go in the same graph, never a second render stacked under the first.
+
+A diagram with its own line syntax goes in on stdin:
+
+```bash
+printf 'sequenceDiagram\n Client->>API: POST /login\n API-->>Client: token\n' | scripts/flow.sh
+printf 'stateDiagram-v2\n [*] --> Idle\n Idle --> Running: start\n Running --> Idle: stop\n' | scripts/flow.sh
+```
+
+The renderer reads Mermaid, so it also draws class, ER, and git diagrams. Those answer questions that are rare in a reply. Reach for one only when the question above has no shape for it.
+
+### Label a step, a decision, and an exit
+
+From BPMN Method and Style (Bruce Silver). The BPMN specification itself says nothing about labels.
+
+- A step is verb then object: `Approve request`. Not `Approval`. Not `Request approval process`.
+- A decision is a question: `Request valid?`
+- An exit carries the end state of the step before it: `Valid` and `Invalid`. Write `yes` and `no` only when the decision is a yes-or-no check.
+- A parallel split has no labels on its exits.
+- Two steps in one diagram do not share a name.
+
+```bash
+scripts/flow.sh 'graph LR; A[Validate request] --> B{Request valid?}; B -->|Valid| C[Charge card]; B -->|Invalid| D[Return error]'
+```
+
+### Label a box that is a thing, not a step
+
+From the C4 model (Simon Brown).
+
+- A box that is a thing carries its name and its type: `Postgres [database]`.
+- Label every line with the relation it shows. Do not write `uses` or `calls`.
+
+C4 also puts a one-line description inside each box. In a chat reply that makes the diagram tall, so write the description in the text below.
 
 ## Examples
 
@@ -73,7 +109,10 @@ Tree: names only, no annotations.
 
 Bar chart: proportional bars, value at the end.
 
+From ISO 24896:2026 (business reporting notation): name the measure and its unit, and let the heading say what the chart shows, not what it means. `Stars` is a heading. `Superpowers is winning` is not.
+
 ```
+Stars
 superpowers        ████████████████████  279k
 mattpocock/skills  █████████████████     239k
 anthropics/skills  ████████████          172k
@@ -124,14 +163,16 @@ Timeline: date, then a label.
                     │
 ```
 
-Titled boxes: the name above the box, one-word contents inside, the relation on the arrow. Hand-drawn, so keep it to two or three boxes.
+Titled boxes: a flow with one edge label. Render it; do not hand-draw it.
+
+```bash
+scripts/flow.sh 'graph LR; A[CLAUDE.md] -->|points to| B[terminal-visuals]'
+```
 
 ```
-CLAUDE.md                  terminal-visuals
-┌─────────┐   points to   ┌────────────────┐
-│ rules   ├──────────────►│ examples       │
-│         │               │ flow.sh        │
-└─────────┘               └────────────────┘
+┌──────────┐points to ┌─────────────────┐
+│CLAUDE.md ├─────────►│terminal-visuals │
+└──────────┘          └─────────────────┘
 ```
 
 Before / after: the shape of the change, not the text of it.
