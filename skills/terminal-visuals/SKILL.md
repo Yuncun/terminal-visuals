@@ -37,32 +37,9 @@ Two or three facts with one attribute each are a sentence, not a table.
 
 One visual per point; one shape per piece of content.
 
-## Boxes and arrows: render by default
+## Boxes and arrows: render them
 
-The visual is the point; the renderer is one way to draw it. Render anything where boxes are joined by arrows, because hand-drawn boxes miscount widths. Write plain text rows by hand: a checklist, a tree, a timeline, a bar chart, and a 2x2 have no widths to align.
-
-Hand-draw when the render comes out wider than the terminal or loses the shape, then check every box width by eye. The common case is one box fanning out to N siblings that all join back:
-
-Rendered, 186 columns, five separately routed edges each carrying the same label. Unreadable.
-
-Hand-drawn, 70 columns:
-
-```
-                 ┌───────────────┐
-                 │  Lead         │
-                 └───────┬───────┘
-        ┌────────┬───────┼───────┬────────┐   spawn ×5
-        ▼        ▼       ▼       ▼        ▼
-      M2.1     M2.2    M2.3    M2.4     M2.5
-        │        │       │       │        │
-        └────────┴───────┴───────┴────────┘   handoff on success
-                         ▼
-                 ┌───────────────┐
-                 │  Lead: merge  │
-                 └───────────────┘
-```
-
-Siblings with the same in-edge and out-edge label sit in one row, and one bus line carries the label once.
+Hand-drawn boxes miscount widths. Render anything where boxes are joined by arrows. Write plain text rows by hand: a checklist, a tree, a timeline, a bar chart, and a 2x2 have no widths to align.
 
 Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with Mermaid text and paste the output in a code fence:
 
