@@ -2,7 +2,7 @@
 
 A skill for agents to draw charts, tables, flow charts, etc. as part of their replies.
 
-Encourages visuals proactively, especially when explaining something unfamiliar or revisiting an explanation. The agent chooses an established diagram type that fits the information, using Termaid's examples rather than a prescribed question-to-shape mapping.
+Encourages visuals proactively, especially when explaining something unfamiliar or revisiting an explanation. The agent identifies the reader's question and the relationship in the evidence, chooses an established visual form, then checks how Termaid can render it. Selection follows diagram definitions and data-visualisation guidance rather than a topic-to-shape mapping.
 
 ## Install
 
