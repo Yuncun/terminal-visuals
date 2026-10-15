@@ -1,6 +1,6 @@
 ---
 name: terminal-visuals
-description: Draw a visual in a chat reply or markdown doc that is read in a terminal. Use when a reply needs a flow diagram, sequence, tree, bar chart, timeline, 2x2, checklist, or before/after, and when choosing between those and a table.
+description: Use when explaining architecture, dependencies, data movement, or a multi-step process; when the user asks to step back or is still confused about how parts connect; or when drawing or choosing a flow, sequence, tree, chart, timeline, checklist, before/after, or table in a chat reply or markdown doc.
 allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/*)
 ---
 
@@ -14,11 +14,23 @@ Write only labels in a cell or a box. Use terms the reader already knows.
 
 Write each explanation in the text below the visual. A comma, a semicolon, or a clause in a cell is an explanation. Move it to the text.
 
+## Explain connections with a diagram
+
+On the first explanation of how components connect, depend on each other, or pass something along, lead with a small rendered diagram. An architecture or process question is enough to trigger it; the user need not ask to "draw".
+
+1. Identify the parts and relationships needed to answer the question. Use a flow for dependencies and handoffs, a sequence for calls over time, or a tree for containment.
+2. Render the smallest diagram that preserves those relationships. Label what each arrow means. Mark uncertain or proposed connections as such.
+3. Put the diagram before the supporting explanation. Explain the one point the picture cannot show in a short paragraph.
+
+When the user asks to step back, says they still do not understand, or asks again how the parts connect, simplify or redraw the same map around the missing relationship. Keep familiar names and add only the detail needed for that question.
+
 ## Pick the shape by the question
 
 ```
 what got done?                       checklist
 what contains what?                  tree
+how do these parts connect?          flow with labeled relationships
+what depends on what?                flow with labeled dependencies
 what order do things happen in?      flow (boxes and arrows)
 who calls whom, in what order?       sequence
 what states can it be in?            state
@@ -30,10 +42,10 @@ where does each option sit?          2x2
 what changed?                        before / after
 what is in each part?                titled boxes
 how do N items compare on M things?  table, and only then
-why did it happen?                   a sentence, no visual
+where does the process break?        flow with the failing step marked
 ```
 
-Two or three facts with one attribute each are a sentence, not a table.
+Two or three independent facts with one attribute each are a sentence, not a table. Connected parts still benefit from a diagram, even when there are only two or three.
 
 One visual per point; one shape per piece of content.
 
@@ -42,6 +54,8 @@ One visual per point; one shape per piece of content.
 Hand-drawn boxes miscount widths. Render anything where boxes are joined by arrows. Write plain text rows by hand: a checklist, a tree, a timeline, a bar chart, and a 2x2 have no widths to align.
 
 Run `${CLAUDE_SKILL_DIR}/scripts/flow.sh` with Mermaid text and paste the output in a code fence:
+
+Use the skill's supplied base directory to resolve `scripts/flow.sh` in clients without `CLAUDE_SKILL_DIR`, including Copilot. The examples below use paths relative to that directory. Termaid produces plain text; the reply displays that output, not a Mermaid code block requiring a separate renderer.
 
 ```bash
 scripts/flow.sh 'graph LR; A[edit] --> B[commit] --> C[push] --> D[work: pull]'
@@ -59,7 +73,7 @@ printf 'sequenceDiagram\n Client->>API: POST /login\n API-->>Client: token\n' | 
 printf 'stateDiagram-v2\n [*] --> Idle\n Idle --> Running: start\n Running --> Idle: stop\n' | scripts/flow.sh
 ```
 
-The renderer reads Mermaid, so it also draws class, ER, and git diagrams. Those answer questions that are rare in a reply. Reach for one only when the question above has no shape for it.
+For specialized diagrams, consult the [Termaid examples](https://termaid.com/examples.html) and check the installed renderer with `termaid --help`. Use its local renderer for work content; the public playground is for public examples.
 
 ### Label a step, a decision, and an exit
 
@@ -195,10 +209,6 @@ Fixed:
 
 Oryx reads `pnpm-lock.yaml` but not `bun.lock`, so bun needs its own build step.
 
-## When not to draw
+## When prose is enough
 
-A "why" question is an explanation. Answer in two or three sentences; no flow of the failure, no table of fixes unless there are several fixes with several attributes each.
-
-Q: why does the build say `window is not defined`?
-
-A: Astro runs the component in Node at build time, and the chart library reads `window` when imported. Import it inside `onMount`, or mark the island `client:only`.
+Use a sentence for a definition, a single fact, or a direct correction with no useful relationship to show. For a "why" question involving several components or steps, draw the relevant path and explain the cause below it. Choose by the relationships in the answer, not by whether the question starts with "why".
