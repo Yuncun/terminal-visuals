@@ -2,10 +2,7 @@
 
 A skill for agents to draw charts, tables, flow charts, etc. as part of their replies.
 
-Architecture, dependencies, and multi-step processes start with a diagram. Follow-up confusion prompts a simpler or more focused diagram.
-
-Supports:
-(checklist, tree, flow, bar chart, timeline, 2x2, before/after, table)
+Encourages visuals proactively, especially when explaining something unfamiliar or revisiting an explanation. The agent chooses an established diagram type that fits the information, using Termaid's examples rather than a prescribed question-to-shape mapping.
 
 ## Install
 
